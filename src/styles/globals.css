@@ -33,3 +33,7 @@ body {
 .platoons-card {
   @apply w-1/3 p-3 bg-neutral-900 hover:bg-neutral-800
 }
+
+.creator-slot-text {
+  @apply text-gray-300 text-2xl hover:text-white transition ease-linear duration-100;
+}
