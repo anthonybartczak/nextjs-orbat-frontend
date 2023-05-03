@@ -4,7 +4,7 @@ const currentDate = new Date()
 
 export async function getServerSideProps(context: any) {
     // Fetch data from external API
-    const res = await fetch(process.env.PUBLIC_API_SITE + `/api/platoons/`)
+    const res = await fetch(process.env.NEXT_PUBLIC_API_SITE + `/api/platoons/`)
     const data = await res.json()
 
     // Pass data to the page via props

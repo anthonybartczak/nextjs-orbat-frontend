@@ -1,6 +1,6 @@
-import PlatoonNotes from "@/pages/components/PlatoonNotes";
-import PlatoonSources from "@/pages/components/PlatoonSources";
-import PlatoonStructure from "@/pages/components/PlatoonStructure";
+import PlatoonNotes from "../../../components/PlatoonNotes";
+import PlatoonSources from "../../../components/PlatoonSources";
+import PlatoonStructure from "../../../components/PlatoonStructure";
 import { NextPage } from "next";
 
 const currentDate = new Date()
@@ -8,9 +8,9 @@ const currentDate = new Date()
 export async function getServerSideProps(context: any) {
 
     var uuid = context.query.uuid;
-    console.log(uuid);
+
     // Fetch data from external API
-    const res = await fetch(process.env.PUBLIC_API_SITE + `/api/platoons/${uuid}/details/`)
+    const res = await fetch(process.env.NEXT_PUBLIC_API_SITE + `/api/platoons/${uuid}/details/`)
     const [data] = await res.json()
 
     // Pass data to the page via props
