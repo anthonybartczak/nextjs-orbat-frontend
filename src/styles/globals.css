@@ -13,3 +13,11 @@
 .creator-slot-text {
   @apply text-gray-300 text-2xl hover:text-white transition ease-linear duration-100;
 }
+
+.squad-unit-field {
+  @apply text-xl text-gray-300 bg-gray-900 p-1 mb-1 transition ease-linear duration-100;
+}
+
+.platoon-submit-input {
+  @apply top-8 text-2xl block box-border bg-red-500 text-gray-100 p-1 rounded-md items-center
+}

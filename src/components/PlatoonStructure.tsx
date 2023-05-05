@@ -5,7 +5,7 @@ export default function PlatoonStructure({ platoon }:any) {
 	return (
 		<>
 			<ul role="list" className="flex flex-col gap-4">
-				{platoon.map((item: any) => (
+				{platoon && platoon.map((item: any) => (
 					<li className='text-2xl flex flex-col' key={item.name}>
 					{
 						item.count > 1 ? item.count + " x " + item.name : item.name
