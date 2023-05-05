@@ -7,7 +7,7 @@ export default function MyApp({
 }: any) {
 
   return (
-    <SessionProvider session={session} basePath="/api/token/">
+    <SessionProvider session={session}>
       <Component {...pageProps} />
     </SessionProvider>
   )

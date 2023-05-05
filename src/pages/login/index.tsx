@@ -8,7 +8,7 @@ const LoginPage: NextPage = () => {
 
 	return (
         <>
-            <Navbar session={session}/>
+            <Navbar status={status}/>
             <main className="flex flex-col">
                 <div>Signed in as {session?.user.userName}</div>
             </main>

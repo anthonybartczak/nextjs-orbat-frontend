@@ -18,8 +18,6 @@ export default NextAuth({
       async authorize(credentials, req) {
         // Add logic here to look up the user from the credentials supplied
 
-        console.log(credentials)
-
         const res = await fetch(process.env.NEXT_PUBLIC_API_SITE + "/api/token/", {
           method: "POST",
           headers: {
