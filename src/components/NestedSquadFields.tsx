@@ -55,8 +55,8 @@ const NestedSquadFields = ({id, nestIndex, control, register, getValues }: any) 
                                 {getValues(`squadFieldArray[${nestIndex}].nestedArray[${index}].unitWeapons`).join(", ")}
                             </span> */}
                             <button className="text-red-500" onClick={() => remove(index)}>×</button>
-                            <button className="text-gray-300" onClick={() => move(index, index - 1)}>↑</button>
-                            <button className="text-gray-300" onClick={() => move(index, index + 1)}>↓</button>
+                            <button className="text-gray-300" hidden={index === 0} onClick={() => move(index, index - 1)}>↑</button>
+                            <button className="text-gray-300" hidden={index === fields.length - 1} onClick={() => move(index, index + 1)}>↓</button>
                         </div>
                     </>
                 )

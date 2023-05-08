@@ -46,8 +46,8 @@ const PlatoonCreator = () => {
                                             <span>{name}</span>
                                             <span>({count})</span>
                                         </div>
-                                        <button className="text-gray-300 text-xl" onClick={() => moveSquad(index, index - 1)}>↑</button>
-                                        <button className="text-gray-300 text-xl" onClick={() => moveSquad(index, index + 1)}>↓</button>
+                                        <button className="text-gray-300 text-xl" hidden={index === 0} onClick={() => moveSquad(index, index - 1)}>↑</button>
+                                        <button className="text-gray-300 text-xl" hidden={index === squadFields.length - 1} onClick={() => moveSquad(index, index + 1)}>↓</button>
                                         <button className="text-red-500 text-xl" onClick={() => removeSquad(index)}>×</button>
                                     </div>
                                     <div id={id} className="flex flex-col gap-x-1">
