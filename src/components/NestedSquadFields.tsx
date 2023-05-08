@@ -1,8 +1,8 @@
 import { useFieldArray } from "react-hook-form";
 
-const NestedSquadFields = ({nestIndex, control, register, getValues }: any) => {
+const NestedSquadFields = ({id, nestIndex, control, register, getValues }: any) => {
 
-    const { fields, append, remove } = useFieldArray({
+    const { fields, append, remove, move } = useFieldArray({
         control,
         name: `squadFieldArray[${nestIndex}].nestedArray`
     });
@@ -33,12 +33,30 @@ const NestedSquadFields = ({nestIndex, control, register, getValues }: any) => {
                 //console.log(getValues("squadFieldArray"))
                 return (
                     <>
-                        <div className="flex flex-row gap-x-2 ml-6" key={item.id}>
-                            <span className='squad-unit-field'>{getValues(`squadFieldArray[${nestIndex}].nestedArray[${index}].unitType`)}</span>
-                            <span className='squad-unit-field'>{getValues(`squadFieldArray[${nestIndex}].nestedArray[${index}].unitName`)}</span>
-                            <span className='squad-unit-field'>{getValues(`squadFieldArray[${nestIndex}].nestedArray[${index}].unitRank`)}</span>
-                            <span className='squad-unit-field'>{getValues(`squadFieldArray[${nestIndex}].nestedArray[${index}].unitWeapons`).join(", ")}</span>
-                            <button className="text-red-500" onClick={() => remove(index)}>x</button>
+                        <div id={id + '-' + index} className="flex flex-row gap-x-2 ml-6" key={item.id}>
+                            <span
+                                id={nestIndex + "-" + index + "-unitType"}
+                                className='squad-unit-field'>
+                                {getValues(`squadFieldArray[${nestIndex}].nestedArray[${index}].unitType`)}
+                            </span>
+                            <span
+                                id={nestIndex + "-" + index + "-unitName"}
+                                className='squad-unit-field'>
+                                {getValues(`squadFieldArray[${nestIndex}].nestedArray[${index}].unitName`)}
+                            </span>
+                            <span
+                                id={nestIndex + "-" + index + "-unitRank"}
+                                className='squad-unit-field'>
+                                {getValues(`squadFieldArray[${nestIndex}].nestedArray[${index}].unitRank`)}
+                            </span>
+                            {/* <span
+                                id={nestIndex + "-" + index + "-unitWeapons"}
+                                className='squad-unit-field'>
+                                {getValues(`squadFieldArray[${nestIndex}].nestedArray[${index}].unitWeapons`).join(", ")}
+                            </span> */}
+                            <button className="text-red-500" onClick={() => remove(index)}>×</button>
+                            <button className="text-gray-300" onClick={() => move(index, index - 1)}>↑</button>
+                            <button className="text-gray-300" onClick={() => move(index, index + 1)}>↓</button>
                         </div>
                     </>
                 )
