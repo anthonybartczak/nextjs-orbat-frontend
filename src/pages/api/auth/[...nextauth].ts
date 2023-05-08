@@ -2,23 +2,23 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export default NextAuth({
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
-      // The name to display on the sign in form (e.g. "Sign in with...")
-      name: "Credentials",
-      // `credentials` is used to generate a form on the sign in page.
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
+      name: "credentials",
+      id: "credentials",
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        username: { label: "Username", type: "text", placeholder: "John Doe" },
         password: { label: "Password", type: "password" },
       },
 
       async authorize(credentials, req) {
         // Add logic here to look up the user from the credentials supplied
 
-        const res = await fetch(process.env.NEXT_PUBLIC_API_SITE + "/api/token/", {
+        const response = await fetch(process.env.NEXT_PUBLIC_API_SITE + "/api/auth/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -29,27 +29,47 @@ export default NextAuth({
           }),
         });
 
-        const user = await res.json();
+        const data = await response.json();
 
-        if (user) {
-          // Any object returned will be saved in `user` property of the JWT
-          return user;
-        } else {
-          // If you return null then an error will be displayed advising the user to check their details.
-          return null;
-
-          // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+        if (response.ok && data?.access) {
+          return data;
         }
+
+        return Promise.reject(new Error(data?.errors));
       },
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+
+    async jwt ({ token, user }) {
+
+      if (user?.email) {
+        return { ...token, ...user };
+      }
+
+      // on subsequent calls, token is provided and we need to check if it's expired
+      if (token?.exp) {
+        if (Date.now() / 1000 < token?.exp) return { ...token, ...user };
+      } else if (token?.refreshToken) return refreshAccessToken(token);
+
       return { ...token, ...user };
     },
-    async session({ session, token, user }) {
-      session.user = token as any;
-      return session;
+
+    session ({ session, token }) {
+      if (Date.now() / 1000 > token?.exp && token?.refreshTokenExpires && Date.now() / 1000 > token?.refreshTokenExpires) {
+        return Promise.reject({
+          error: new Error("Refresh token has expired. Please log in again to get a new refresh token."),
+        });
+      }
+
+      const accessTokenData = JSON.parse(atob(token.access.split(".")?.at(1)));
+      session.user = accessTokenData;
+      token.accessTokenExpires = accessTokenData.exp;
+
+      session.access = token?.access;
+
+      return Promise.resolve(session);
     },
+
   },
 });

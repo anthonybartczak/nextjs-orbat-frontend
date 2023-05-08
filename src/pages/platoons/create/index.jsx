@@ -1,10 +1,14 @@
 import NestedSquadFields from '@/components/NestedSquadFields';
 import { useState, useEffect } from 'react';
 import { useFieldArray, useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
+import Navbar from "@/components/Navbar";
 
 const currentDate = new Date()
 
 const PlatoonCreator = () => {
+
+    const { data: session, status } = useSession()
     const { register, handleSubmit, control, getValues } = useForm();
 
     const { fields: squadFields, append: appendSquad, remove: removeSquad } = useFieldArray({ control, name: "squadFieldArray"});
@@ -18,6 +22,7 @@ const PlatoonCreator = () => {
 
 	return (
         <>
+        <Navbar status={status} session={session}/>
             <div className="flex flex-col w-1/6 absolute left-0 top-0 p-5 bg-neutral-700 h-full">
                 <div className='flex flex-col py-1 gap-y-1'>
                     <input id="squadNameInput" className="p-0.5 text-black" type="text" placeholder="Enter the squad name here..." required/>

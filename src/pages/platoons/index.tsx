@@ -1,19 +1,22 @@
+import Navbar from "@/components/Navbar";
 import { NextPage } from "next";
+import { useSession } from "next-auth/react";
 
 const currentDate = new Date()
 
 export async function getServerSideProps(context: any) {
-    // Fetch data from external API
     const res = await fetch(process.env.NEXT_PUBLIC_API_SITE + `/api/platoons/`)
     const data = await res.json()
 
-    // Pass data to the page via props
     return { props: { data } }
 }
 
 const PlatoonIndex: NextPage = ({data}: any) => {
+    const { data: session, status } = useSession()
+
 	return (
         <>
+            <Navbar status={status} session={session}/>
             <main className="flex flex-col">
             <p className="instructions bg-neutral-900 text-gray-300 text-2xl mt-4 p-3 text-center">
                 Below you can find a list of all of the currently available platoon structures.

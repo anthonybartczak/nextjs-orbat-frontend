@@ -2,8 +2,9 @@
 import Link from "next/link";
 import { signIn, signOut } from "next-auth/react";
 
-const Navbar = (status: any) => {
-    console.log(status)
+const Navbar = (status: any, session: any) => {
+
+    //console.log(status);
 
     return (
         <div className="bg-gray-100 font-sans w-full m-0">
@@ -18,7 +19,8 @@ const Navbar = (status: any) => {
 
                         <div className="hidden sm:flex sm:items-center">
                             <Link href="/" className="text-gray-200 text-sm font-semibold hover:text-purple-600 mr-4">Home</Link>
-                            <Link  href="/platoons" className="text-gray-200 text-sm font-semibold hover:text-purple-600 mr-4">Platoons</Link >
+                            <Link href="/platoons" className="text-gray-200 text-sm font-semibold hover:text-purple-600 mr-4">Platoons</Link >
+                            <Link href="/platoons/create" className="text-gray-200 text-sm font-semibold hover:text-purple-600 mr-4">Create</Link >
                         </div>
                         <div className="hidden sm:flex sm:items-center">
                         {status.status === 'authenticated' ? (
