@@ -1,8 +1,6 @@
 import NestedSquadFields from "@/components/NestedSquadFields";
 import { useFieldArray } from "react-hook-form";
 
-let renderCount = 0;
-
 const SquadFields = ({ control, register, getValues, watch }) => {
   const {
     fields: squadFields,
@@ -10,12 +8,11 @@ const SquadFields = ({ control, register, getValues, watch }) => {
     remove: removeSquad,
     move: moveSquad,
     swap: swapSquad,
-  } = useFieldArray({ control, name: "squadFieldArray" });
-
-  renderCount++;
+  } = useFieldArray({ control, name: "platoon" });
 
   const squadNameField = typeof document !== 'undefined' && (document.getElementById("squadNameInput"));
   const squadCountField = typeof document !== 'undefined' && (document.getElementById("squadCountInput"));
+  const squadHeaderTypeField = typeof document !== 'undefined' && (document.getElementById("squadHeaderTypeInput"));
 
   return (
     <>
@@ -56,6 +53,20 @@ const SquadFields = ({ control, register, getValues, watch }) => {
                 required
               />
             </div>
+            <input
+                id="platoonCountryInput"
+                className="p-0.5 text-black rounded-sm shadow-xl"
+                type="text"
+                placeholder="Enter the country code here..."
+                required
+              />
+              <input
+                id="platoonCountryInput"
+                className="p-0.5 text-black rounded-sm shadow-xl"
+                type="text"
+                placeholder="Enter the branch here..."
+                required
+              />
           </div>
           <div className="flex flex-col gap-y-1 mt-12">
             <input
@@ -89,7 +100,9 @@ const SquadFields = ({ control, register, getValues, watch }) => {
               onClick={() =>
                 appendSquad({
                   name: squadNameField?.value,
-                  count: squadCountField.value,
+                  count: parseInt(squadCountField?.value),
+                  type: "squad",
+                  headerType: squadHeaderTypeField?.value,
                 })
               }
             >

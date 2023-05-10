@@ -5,7 +5,7 @@ const NestedSquadFields = ({id, nestIndex, control, register, getValues, watch }
 
     const { fields, append, remove, swap } = useFieldArray({
         control,
-        name: `squadFieldArray[${nestIndex}].nestedArray`
+        name: `platoon[${nestIndex}].units`
     });
 
     return (
@@ -20,10 +20,10 @@ const NestedSquadFields = ({id, nestIndex, control, register, getValues, watch }
             <input id={"unitWeaponInput-" + nestIndex} className="w-1/5 text-center" placeholder="Weapons" type="text"></input>
             <button type="button" className="bg-gray-600 shadow-md p-1 rounded-full" onClick={
                 () => append({
-                        unitType: (document.getElementById("unitTypeSelect-" + nestIndex) as HTMLInputElement)?.value,
-                        unitName: (document.getElementById("unitNameInput-" + nestIndex) as HTMLInputElement)?.value,
-                        unitRank: (document.getElementById("unitRankInput-" + nestIndex) as HTMLInputElement)?.value,
-                        unitWeapons: (document.getElementById("unitWeaponInput-" + nestIndex) as HTMLInputElement)?.value.split(","),
+                        //type: (document.getElementById("unitTypeSelect-" + nestIndex) as HTMLInputElement)?.value,
+                        name: (document.getElementById("unitNameInput-" + nestIndex) as HTMLInputElement)?.value,
+                        rank: (document.getElementById("unitRankInput-" + nestIndex) as HTMLInputElement)?.value,
+                        weapons: (document.getElementById("unitWeaponInput-" + nestIndex) as HTMLInputElement)?.value.split(","),
                     }
                 )
             }
@@ -33,22 +33,22 @@ const NestedSquadFields = ({id, nestIndex, control, register, getValues, watch }
             {fields.map(( item, index ) => {
                 return (
                     <li key={item.id} className="flex flex-row gap-x-2 ml-6">
+                        {/* <span
+                            className='squad-unit-field'>
+                            {watch(`platoon[${nestIndex}].units[${index}].type`)}
+                        </span> */}
                         <span
                             className='squad-unit-field'>
-                            {watch(`squadFieldArray[${nestIndex}].nestedArray[${index}].unitType`)}
+                            {watch(`platoon[${nestIndex}].units[${index}].name`)}
                         </span>
                         <span
                             className='squad-unit-field'>
-                            {watch(`squadFieldArray[${nestIndex}].nestedArray[${index}].unitName`)}
-                        </span>
-                        <span
-                            className='squad-unit-field'>
-                            {watch(`squadFieldArray[${nestIndex}].nestedArray[${index}].unitRank`)}
+                            {watch(`platoon[${nestIndex}].units[${index}].rank`)}
                         </span>
                         <span
                             //id={nestIndex + "-" + index + "-unitWeapons"}
                             className='squad-unit-field'>
-                            {getValues(`squadFieldArray[${nestIndex}].nestedArray[${index}].unitWeapons`).join(", ")}
+                            {getValues(`platoon[${nestIndex}].units[${index}].weapons`).join(", ")}
                         </span>
                         <button
                             type="button"

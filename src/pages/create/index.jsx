@@ -1,25 +1,59 @@
-import NestedSquadFields from '@/components/NestedSquadFields';
 import SquadFields from '@/components/SquadFields';
-import { useState, useEffect } from 'react';
-import { useFieldArray, useForm } from "react-hook-form";
+import { useCallback, useState, useEffect } from 'react';
+import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import Navbar from "@/components/Navbar";
+import { usePersistForm } from '@/hooks/usePersistForm';
 
-const currentDate = new Date()
+const FORM_DATA_KEY = "app_form_local_data";
 
-const PlatoonCreator = () => {
+const PlatoonCreator = ({initialValues}) => {
+
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    const getSavedData = useCallback(() => {
+        let data = typeof window !== "undefined" && window.localStorage.getItem(FORM_DATA_KEY);
+        if (data) {
+         // Parse it to a javaScript object
+          try {
+            data = JSON.parse(data);
+          } catch (err) {
+            console.log(err);
+          }
+          return data;
+        }
+        return initialValues;
+    }, [initialValues]);
 
     const { data: session, status } = useSession()
+    const { register, handleSubmit, control, getValues, watch } = useForm(
+        {defaultValues: getSavedData(),}
+    );
 
-    const { register, handleSubmit, control, getValues, watch } = useForm();
+    const platoonName = typeof document !== 'undefined' && (document.getElementById("platoonNameInput"));
+    const platoonCount = typeof document !== 'undefined' && (document.getElementById("platoonCountInput"));
+    const platoonStartYear = typeof document !== 'undefined' && (document.getElementById("platoonStartYearInput"));
+    const platoonEndYear = typeof document !== 'undefined' && (document.getElementById("platoonEndYearInput"));
 
-    const [forceUpdate, setForceUpdate] = useState(0);
 
     const onFormSubmit = (data) => {
+        //localStorage.removeItem(FORM_DATA_KEY);
+
+        const user_id = session?.user.id;
+
+        const payload = {
+
+        };
+
         console.log(data);
     }
 
-	return (
+    usePersistForm({ value: getValues(), localStorageKey: FORM_DATA_KEY });
+
+	return ( mounted &&
         <>
         <Navbar/>
             <main className="flex flex-col items-center">
