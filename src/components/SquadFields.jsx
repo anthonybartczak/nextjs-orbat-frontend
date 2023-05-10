@@ -61,7 +61,7 @@ const SquadFields = ({ control, register, getValues, watch }) => {
                 required
               />
               <input
-                id="platoonCountryInput"
+                id="platoonBranchInput"
                 className="p-0.5 text-black rounded-sm shadow-xl"
                 type="text"
                 placeholder="Enter the branch here..."

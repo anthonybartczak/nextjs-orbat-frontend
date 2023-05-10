@@ -2,8 +2,9 @@ import SquadFields from '@/components/SquadFields';
 import { useCallback, useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
-import Navbar from "@/components/Navbar";
 import { usePersistForm } from '@/hooks/usePersistForm';
+import Navbar from "@/components/Navbar";
+import axios from 'axios';
 
 const FORM_DATA_KEY = "app_form_local_data";
 
@@ -37,18 +38,35 @@ const PlatoonCreator = ({initialValues}) => {
     const platoonCount = typeof document !== 'undefined' && (document.getElementById("platoonCountInput"));
     const platoonStartYear = typeof document !== 'undefined' && (document.getElementById("platoonStartYearInput"));
     const platoonEndYear = typeof document !== 'undefined' && (document.getElementById("platoonEndYearInput"));
+    const platoonCountry = typeof document !== 'undefined' && (document.getElementById("platoonCountryInput"));
+    const platoonBranch = typeof document !== 'undefined' && (document.getElementById("platoonBranchInput"));
 
-
-    const onFormSubmit = (data) => {
+    const onFormSubmit = async (data) => {
         //localStorage.removeItem(FORM_DATA_KEY);
 
-        const user_id = session?.user.id;
+        const userId = session?.user.id;
+        const startYear = platoonStartYear?.value;
+        const endYear = platoonEndYear?.value;
+
+        const era = `{\"bounds\": \"[)\", \"lower\": \"${startYear}\", \"upper\": \"${endYear}\"}`
 
         const payload = {
-
+            "author_id": userId,
+            "name": platoonName?.value,
+            "era": era,
+            "country": platoonCountry?.value,
+            "branch": platoonBranch?.value,
+            "structure": {
+                "name": platoonName?.value,
+                "size": platoonCount?.value,
+                "platoon": data.platoon
+            }
         };
 
-        console.log(data);
+        const headers = { 'Authorization': 'Bearer ' + session?.access };
+
+        const res = await axios.post(process.env.NEXT_PUBLIC_API_SITE + '/api/create/', payload, { headers })
+            .then(response => console.log(response));
     }
 
     usePersistForm({ value: getValues(), localStorageKey: FORM_DATA_KEY });
