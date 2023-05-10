@@ -5,21 +5,19 @@ export async function middleware(request: NextRequest) {
 
     const { pathname, origin } = request.nextUrl
 
-    const token = await getToken({
-      req: request,
-      secret: process?.env?.NEXTAUTH_SECRET,
-    });
+    const token = await getToken({req: request});
 
-    // if (token?.access && Date.now() / 1000 < token?.exp) {
-    //   console.log("Now", Date.now() / 1000 )
-    //   console.log("Exp", token.exp)
-    // }
+    if (!token) {
+      return NextResponse.redirect(`${origin}/login`);
+    };
 
-    // redirect user without access to login
-    // if (token?.access && token?.access && Date.now() / 1000 < token.exp) {
-    //   console.log("Redirecting...")
-    //   return NextResponse.redirect(`${origin}/login`);
-    // }
+    //console.log("Token: ", token?.accessTokenExpires)
+
+    //redirect user without access to login
+    if (token?.accessTokenExpires && token?.access && Date.now() / 1000 >= token?.accessTokenExpires) {
+      console.log("Redirecting...");
+      return NextResponse.redirect(`${origin}/login`);
+    };
 
     // redirect user without admin access to login
     // if (!token?.isAdmin) {
@@ -30,5 +28,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: '/platoons/create/:path*',
+    matcher: '/create',
 };

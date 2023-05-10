@@ -1,5 +1,18 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import axios from 'axios';
+import jwt_decode from "jwt-decode";
+
+interface accessTokenData {
+  token_type: string,
+  exp: number,
+  iat: number,
+  jti: string,
+  user_id: number,
+  id: number,
+  user: string,
+  email: string,
+}
 
 export default NextAuth({
   session: {
@@ -41,28 +54,44 @@ export default NextAuth({
   ],
   callbacks: {
 
-    async jwt ({ token, user }) {
+    async jwt ({ token, user, account }) {
 
-      if (user?.email) {
+      if (user && account) {
         return { ...token, ...user };
       }
 
       // on subsequent calls, token is provided and we need to check if it's expired
-      if (token?.exp) {
-        if (Date.now() / 1000 < token?.exp) return { ...token, ...user };
-      } else if (token?.refreshToken) return refreshAccessToken(token);
+      if (token?.accessTokenExpires && Math.floor(Date.now() / 1000) >= token?.accessTokenExpires) {
+        try {
+          // Get a new token using the refresh token
+          const res = await axios.post(process.env.NEXT_PUBLIC_API_SITE + '/api/token/refresh/', {
+            refresh: token.refresh,
+          });
+
+          // Return the new token
+          return {
+            ...token,
+            access: res.data.access,
+            refresh: res.data.refresh,
+            accessTokenExpires: Math.floor(Date.now() / 1000) + res.data.exp,
+          };
+        } catch (err) {
+          console.log(err);
+        }
+      }
 
       return { ...token, ...user };
     },
 
     session ({ session, token }) {
-      if (Date.now() / 1000 > token?.exp && token?.refreshTokenExpires && Date.now() / 1000 > token?.refreshTokenExpires) {
+      if (token.exp && Date.now() / 1000 > token?.exp && token?.refreshTokenExpires && Date.now() / 1000 >= token?.refreshTokenExpires) {
         return Promise.reject({
           error: new Error("Refresh token has expired. Please log in again to get a new refresh token."),
         });
       }
 
-      const accessTokenData = JSON.parse(atob(token.access.split(".")?.at(1)));
+      const accessTokenData = jwt_decode<accessTokenData>(token.access);
+
       session.user = accessTokenData;
       token.accessTokenExpires = accessTokenData.exp;
 
