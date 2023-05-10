@@ -20,44 +20,82 @@ const SquadFields = ({ control, register, getValues, watch }) => {
   return (
     <>
       <div className="flex flex-col p-3 h-fit fixed left-0 w-1/6 bg-neutral-900 shadow-b-xl rounded-br-md">
-        <div className="flex flex-col py-1 gap-y-1 w-full">
-          <input
-            id="squadNameInput"
-            className="p-0.5 text-black rounded-sm shadow-xl"
-            type="text"
-            placeholder="Enter the squad name here..."
-            required
-          />
-          <input
-            id="squadCountInput"
-            className="p-0.5 text-black rounded-sm shadow-xl"
-            type="number"
-            defaultValue="1"
-            min="1"
-            max="100"
-            placeholder="Enter the squad count here..."
-            required
-          />
-          <select
-            id="squadHeaderTypeInput"
-            className="p-0.5 text-black rounded-sm shadow-xl"
-          >
-            <option>h1</option>
-            <option>h2</option>
-            <option>h3</option>
-          </select>
-          <button
-            className="bg-gray-900 text-white shadow-xl rounded-sm"
-            onClick={() =>
-              appendSquad({
-                name: squadNameField?.value,
-                count: squadCountField.value,
-              })
-            }
-          >
-            Add a squad
-          </button>
-          {/* <span className="counter">Render Count: {renderCount}</span> */}
+        <div className="flex flex-col py-1 w-full">
+        <div className="flex flex-col gap-y-1">
+            <input
+              id="platoonNameInput"
+              className="p-0.5 text-black rounded-sm shadow-xl"
+              type="text"
+              placeholder="Enter the platoon name here..."
+              required
+            />
+            <input
+              id="platoonCountInput"
+              className="p-0.5 text-black rounded-sm shadow-xl"
+              type="number"
+              placeholder="Enter the platoon units count here..."
+              required
+            />
+            <div className="flex flex-row gap-x-1">
+              <input
+                id="platoonStartYearInput"
+                className="p-0.5 w-1/2 text-black rounded-sm shadow-xl"
+                min="1000"
+                max="9999"
+                type="number"
+                placeholder="Start year"
+                required
+              />
+              <input
+                id="platoonEndYearInput"
+                className="p-0.5 w-1/2 text-black rounded-sm shadow-xl"
+                min="1000"
+                max="9999"
+                type="number"
+                placeholder="End year"
+                required
+              />
+            </div>
+          </div>
+          <div className="flex flex-col gap-y-1 mt-12">
+            <input
+              id="squadNameInput"
+              className="p-0.5 text-black rounded-sm shadow-xl"
+              type="text"
+              placeholder="Enter the squad name here..."
+              required
+            />
+            <input
+              id="squadCountInput"
+              className="p-0.5 text-black rounded-sm shadow-xl"
+              type="number"
+              defaultValue="1"
+              min="1"
+              max="100"
+              placeholder="Enter the squad count here..."
+              required
+            />
+            <select
+              id="squadHeaderTypeInput"
+              className="p-0.5 text-black rounded-sm shadow-xl"
+            >
+              <option>h1</option>
+              <option>h2</option>
+              <option>h3</option>
+            </select>
+            <button
+              type="button"
+              className="bg-gray-900 text-white shadow-xl rounded-sm"
+              onClick={() =>
+                appendSquad({
+                  name: squadNameField?.value,
+                  count: squadCountField.value,
+                })
+              }
+            >
+              Add a squad
+            </button>
+          </div>
         </div>
       </div>
       <ul className="flex flex-col items-center mt-12 gap-y-4">
@@ -72,6 +110,7 @@ const SquadFields = ({ control, register, getValues, watch }) => {
                   </span>
                 </div>
                 <button
+                  type="button"
                   className="text-gray-300 text-xl"
                   hidden={index === 0}
                   onClick={() => swapSquad(index, index - 1)}
@@ -79,6 +118,7 @@ const SquadFields = ({ control, register, getValues, watch }) => {
                   ↑
                 </button>
                 <button
+                  type="button"
                   className="text-gray-300 text-xl"
                   hidden={index === squadFields.length - 1}
                   onClick={() => swapSquad(index, index + 1)}
@@ -86,6 +126,7 @@ const SquadFields = ({ control, register, getValues, watch }) => {
                   ↓
                 </button>
                 <button
+                  type="button"
                   className="text-red-500 text-xl"
                   onClick={() => removeSquad(index)}
                 >

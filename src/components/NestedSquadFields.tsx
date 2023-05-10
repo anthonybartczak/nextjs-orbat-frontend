@@ -18,7 +18,7 @@ const NestedSquadFields = ({id, nestIndex, control, register, getValues, watch }
             <input id={"unitNameInput-" + nestIndex} className="w-1/5 text-center" placeholder="Unit name" type="text"></input>
             <input id={"unitRankInput-" + nestIndex} className="w-1/5 text-center" placeholder="Rank" type="text"></input>
             <input id={"unitWeaponInput-" + nestIndex} className="w-1/5 text-center" placeholder="Weapons" type="text"></input>
-            <button className="bg-gray-600 shadow-md p-1 rounded-full" onClick={
+            <button type="button" className="bg-gray-600 shadow-md p-1 rounded-full" onClick={
                 () => append({
                         unitType: (document.getElementById("unitTypeSelect-" + nestIndex) as HTMLInputElement)?.value,
                         unitName: (document.getElementById("unitNameInput-" + nestIndex) as HTMLInputElement)?.value,
@@ -50,13 +50,19 @@ const NestedSquadFields = ({id, nestIndex, control, register, getValues, watch }
                             className='squad-unit-field'>
                             {getValues(`squadFieldArray[${nestIndex}].nestedArray[${index}].unitWeapons`).join(", ")}
                         </span>
-                        <button className="text-red-500" onClick={() => remove(index)}>×</button>
                         <button
+                            type="button"
+                            className="text-red-500"
+                            onClick={() => remove(index)}
+                        >×</button>
+                        <button
+                            type="button"
                             className="text-gray-300"
                             hidden={index === 0}
                             onClick={() => swap(index, index - 1)}
                         >↑</button>
                         <button
+                            type="button"
                             className="text-gray-300"
                             hidden={index === fields.length - 1}
                             onClick={() => swap(index, index + 1)}
