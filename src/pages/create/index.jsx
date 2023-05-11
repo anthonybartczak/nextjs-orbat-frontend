@@ -42,7 +42,6 @@ const PlatoonCreator = ({initialValues}) => {
     const platoonBranch = typeof document !== 'undefined' && (document.getElementById("platoonBranchInput"));
 
     const onFormSubmit = async (data) => {
-        //localStorage.removeItem(FORM_DATA_KEY);
 
         const userId = session?.user.id;
         const startYear = platoonStartYear?.value;
@@ -66,7 +65,15 @@ const PlatoonCreator = ({initialValues}) => {
         const headers = { 'Authorization': 'Bearer ' + session?.access };
 
         const res = await axios.post(process.env.NEXT_PUBLIC_API_SITE + '/api/create/', payload, { headers })
-            .then(response => console.log(response));
+            .then(response => {
+                console.log(response);
+                if (response.status == 201) {
+                    alert("Platoon created successfully!");
+                    localStorage.removeItem(FORM_DATA_KEY);
+                }
+            });
+
+        //
     }
 
     usePersistForm({ value: getValues(), localStorageKey: FORM_DATA_KEY });
