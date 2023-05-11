@@ -16,7 +16,10 @@ const PlatoonCreator = ({initialValues}) => {
     }, [])
 
     const getSavedData = useCallback(() => {
-        let data = typeof window !== "undefined" && window.localStorage.getItem(FORM_DATA_KEY);
+
+        let data = {"platoon": []};
+        data = typeof window !== "undefined" && window.localStorage.getItem(FORM_DATA_KEY);
+
         if (data) {
          // Parse it to a javaScript object
           try {
@@ -72,8 +75,6 @@ const PlatoonCreator = ({initialValues}) => {
                     localStorage.removeItem(FORM_DATA_KEY);
                 }
             });
-
-        //
     }
 
     usePersistForm({ value: getValues(), localStorageKey: FORM_DATA_KEY });

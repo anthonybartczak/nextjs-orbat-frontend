@@ -10,8 +10,8 @@ export default function Home() {
     <>
     <div className='h-screen'>
       <Navbar />
-      <main className='flex align-middle h-max'>
-        <div className='flex flex-col text-gray-300 gap-y-2'>
+      <main className='flex flex-col h-[calc(100vh-74px)] items-center'>
+        <div className='flex flex-col text-gray-300 gap-y-2 m-auto'>
           <h1 className='text-5xl'>Welcome to ORBAT creator!</h1>
           <div className='text-2xl text-justify'>
             <p><Link className="underline" href={'/platoons'}>Here</Link> you can find a full list of all of the currently available structures.</p>

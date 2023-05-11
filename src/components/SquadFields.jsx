@@ -6,13 +6,8 @@ const SquadFields = ({ control, register, getValues, watch }) => {
     fields: squadFields,
     append: appendSquad,
     remove: removeSquad,
-    move: moveSquad,
     swap: swapSquad,
   } = useFieldArray({ control, name: "platoon" });
-
-  const squadNameField = typeof document !== 'undefined' && (document.getElementById("squadNameInput"));
-  const squadCountField = typeof document !== 'undefined' && (document.getElementById("squadCountInput"));
-  const squadHeaderTypeField = typeof document !== 'undefined' && (document.getElementById("squadHeaderTypeInput"));
 
   return (
     <>
@@ -99,10 +94,10 @@ const SquadFields = ({ control, register, getValues, watch }) => {
               className="bg-gray-900 text-white shadow-xl rounded-sm"
               onClick={() =>
                 appendSquad({
-                  name: squadNameField?.value,
-                  count: parseInt(squadCountField?.value),
+                  name: document.getElementById("squadNameInput")?.value,
+                  count: parseInt(document.getElementById("squadCountInput")?.value),
                   type: "squad",
-                  headerType: squadHeaderTypeField?.value,
+                  headerType: document.getElementById("squadHeaderTypeInput")?.value,
                 })
               }
             >
